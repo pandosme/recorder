@@ -320,7 +320,7 @@
         "type": "debug",
         "z": "5d60c43b4b924270",
         "name": "debug 182",
-        "active": false,
+        "active": true,
         "tosidebar": true,
         "console": false,
         "tostatus": false,
@@ -408,8 +408,8 @@
         "columns": [
             {
                 "field": "time",
-                "title": "",
-                "width": "",
+                "title": "Time",
+                "width": "30%",
                 "align": "left",
                 "formatter": "plaintext",
                 "formatterParams": {
@@ -419,7 +419,7 @@
             {
                 "field": "name",
                 "title": "Camera",
-                "width": "",
+                "width": "30%",
                 "align": "left",
                 "formatter": "plaintext",
                 "formatterParams": {
@@ -429,7 +429,7 @@
             {
                 "field": "type",
                 "title": "Type",
-                "width": "",
+                "width": "20%",
                 "align": "left",
                 "formatter": "plaintext",
                 "formatterParams": {
@@ -439,7 +439,7 @@
             {
                 "field": "duration",
                 "title": "Duration",
-                "width": "",
+                "width": "20%",
                 "align": "left",
                 "formatter": "plaintext",
                 "formatterParams": {
@@ -720,7 +720,7 @@
         "type": "debug",
         "z": "5d60c43b4b924270",
         "name": "debug 217",
-        "active": false,
+        "active": true,
         "tosidebar": true,
         "console": false,
         "tostatus": false,
@@ -2449,7 +2449,7 @@
         "type": "debug",
         "z": "0854d5330de43309",
         "name": "debug 149",
-        "active": true,
+        "active": false,
         "tosidebar": true,
         "console": false,
         "tostatus": false,
