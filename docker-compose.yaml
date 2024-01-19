@@ -5,24 +5,26 @@ services:
         container_name: recorder-app
         restart: always
         user: '0'
-        environment:
-          - TZ=Europe/Stockholm
-          - SERVER_ADDRESS=rec.juhlin.me
-          - MQTT_ADDRESS=mqtt.juhlin.me
-          - MQTT_USER=pandos
-          - MQTT_PASSWORD=mandos          
-          - MINIO_ADDRESS=10.13.8.20
-          - MINIO_KEY=u15ZLeACBFPy0KqtxHDN
-          - MINIO_SECRET=ISRok8ICxFqkqVBHJ9aoBvhavYJ5gIqWaD1sLFC0
-          - ACS_ADDRESS=10.13.8.120
-          - ACS_USER=admin
-          - ACS_PASSWORD=r00tpa88
         ports:
-          - '18000:1880'
+          - '18100:1880'
         links:
-          - influxdb      
+          - influxdb
         volumes:
           - ./:/data
+        environment:
+#Set you enviroment data here
+          - TZ=Europe/Stockholm
+          - SERVER_ADDRESS=a.a.a.a:18100
+          - MQTT_ADDRESS=b.b.b.b
+          - MQTT_USER=some user or leave blank if no user required
+          - MQTT_PASSWORD=some password or leave blank if no user required
+          - AXIS_ROOT_PASSWORD=root account password to Axis cameras
+          - MINIO_ADDRESS=c.c.c.c
+          - MINIO_KEY=XXXXXX
+          - MINIO_SECRET=CCCCCCC
+          - ACS_ADDRESS=ACS address if available
+          - ACS_USER=ACS user if available
+          - ACS_PASSWORD=ACS password if available
     influxdb:
         container_name: recorder-influx
         restart: always
@@ -30,5 +32,6 @@ services:
         user: '0'
         volumes:
           - ./influxdb:/var/lib/influxdb
+# Uncomment below if you want to expose the Influx DB
 #        ports:
 #          - '8086:8086' 
