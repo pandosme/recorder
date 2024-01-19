@@ -1,5 +1,4 @@
 influxdb
-settings.js
 flows-cred.json
 *.backup
 package-lock.json
