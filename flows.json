@@ -60,7 +60,7 @@
             "ab83b699807e02af"
         ],
         "x": 274,
-        "y": 499,
+        "y": 579,
         "w": 712,
         "h": 262
     },
@@ -90,7 +90,7 @@
             "37dad46455bbbcb5"
         ],
         "x": 274,
-        "y": 179,
+        "y": 259,
         "w": 772,
         "h": 302
     },
@@ -99,7 +99,7 @@
         "type": "junction",
         "z": "e47edbe0ed437c73",
         "x": 1020,
-        "y": 660,
+        "y": 740,
         "wires": [
             [
                 "15377bc9489d782d"
@@ -259,7 +259,7 @@
     {
         "id": "ca2547b7188cdec3",
         "type": "influxdb",
-        "hostname": "10.13.8.20",
+        "hostname": "influxdb",
         "port": "8086",
         "protocol": "http",
         "database": "log",
@@ -267,8 +267,7 @@
         "usetls": false,
         "tls": "",
         "influxdbVersion": "1.x",
-        "url": "http://192.168.5.249:8086",
-        "timeout": "",
+        "url": "http://influxdb:8086",
         "rejectUnauthorized": true
     },
     {
@@ -304,7 +303,7 @@
         "id": "651bcdc1f2d63e9b",
         "type": "minio-config",
         "name": "MinIO Instance",
-        "host": "10.13.8.20",
+        "host": "${MINIO_ADDRESS}",
         "port": "9000",
         "useSsl": false
     },
@@ -343,7 +342,7 @@
         "server": "fafbed826f0a0088",
         "action": "Inventory",
         "x": 420,
-        "y": 380,
+        "y": 460,
         "wires": [
             [
                 "e4c5a49f98109f57"
@@ -363,7 +362,7 @@
         "stream": false,
         "addname": "",
         "x": 610,
-        "y": 380,
+        "y": 460,
         "wires": [
             [
                 "62cc1c6b863ddc7c"
@@ -383,7 +382,7 @@
         "finalize": "",
         "libs": [],
         "x": 800,
-        "y": 380,
+        "y": 460,
         "wires": [
             [
                 "ee3b21388abd7f7a"
@@ -425,7 +424,7 @@
         "to": "",
         "reg": false,
         "x": 440,
-        "y": 320,
+        "y": 400,
         "wires": [
             [
                 "2adb0f0781879628"
@@ -450,7 +449,7 @@
         "count": "",
         "reduceRight": false,
         "x": 970,
-        "y": 380,
+        "y": 460,
         "wires": [
             [
                 "f7b6334eed19954f"
@@ -470,7 +469,7 @@
         "overwriteFile": "true",
         "encoding": "utf8",
         "x": 810,
-        "y": 440,
+        "y": 520,
         "wires": [
             []
         ]
@@ -496,7 +495,7 @@
         "to": "",
         "reg": false,
         "x": 440,
-        "y": 440,
+        "y": 520,
         "wires": [
             [
                 "1acc9f5bbcc92b9d"
@@ -516,7 +515,7 @@
         "finalize": "",
         "libs": [],
         "x": 670,
-        "y": 320,
+        "y": 400,
         "wires": [
             [
                 "0fe97ed2aa551fc8"
@@ -536,7 +535,7 @@
         "finalize": "",
         "libs": [],
         "x": 610,
-        "y": 440,
+        "y": 520,
         "wires": [
             [
                 "1ba6fc76fb8ec2a3"
@@ -557,7 +556,7 @@
         "encoding": "none",
         "allProps": false,
         "x": 390,
-        "y": 260,
+        "y": 340,
         "wires": [
             [
                 "6dc4a43b01ff186c"
@@ -574,7 +573,7 @@
         "action": "",
         "pretty": false,
         "x": 630,
-        "y": 260,
+        "y": 340,
         "wires": [
             [
                 "ccd87d2a158a9921"
@@ -602,7 +601,7 @@
         "to": "",
         "reg": false,
         "x": 810,
-        "y": 260,
+        "y": 340,
         "wires": [
             [
                 "d045301036d3aac2"
@@ -620,7 +619,7 @@
         ],
         "uncaught": false,
         "x": 350,
-        "y": 220,
+        "y": 300,
         "wires": [
             [
                 "0f3d7eb49d64cdb8"
@@ -648,7 +647,7 @@
         "to": "",
         "reg": false,
         "x": 580,
-        "y": 220,
+        "y": 300,
         "wires": [
             [
                 "37dad46455bbbcb5",
@@ -669,7 +668,7 @@
         "overwriteFile": "true",
         "encoding": "utf8",
         "x": 810,
-        "y": 220,
+        "y": 300,
         "wires": [
             []
         ]
@@ -684,7 +683,7 @@
             "f899f7944ab5b501"
         ],
         "x": 165,
-        "y": 600,
+        "y": 680,
         "wires": [
             [
                 "db54fc5e6711e011"
@@ -713,7 +712,7 @@
         "payload": "",
         "payloadType": "date",
         "x": 150,
-        "y": 540,
+        "y": 620,
         "wires": [
             [
                 "702fb120fcbf32cf"
@@ -784,7 +783,7 @@
         "type": "debug",
         "z": "e47edbe0ed437c73",
         "name": "debug 225",
-        "active": false,
+        "active": true,
         "tosidebar": true,
         "console": false,
         "tostatus": false,
@@ -805,7 +804,7 @@
             "a573fabeba0db867"
         ],
         "x": 1075,
-        "y": 660,
+        "y": 740,
         "wires": []
     },
     {
@@ -830,7 +829,7 @@
         "topic": "topic",
         "topicType": "msg",
         "x": 360,
-        "y": 540,
+        "y": 620,
         "wires": [
             [
                 "db54fc5e6711e011"
@@ -902,7 +901,7 @@
         "outputs": 1,
         "cts": true,
         "x": 670,
-        "y": 600,
+        "y": 680,
         "wires": [
             [
                 "126bafea1065f5e9"
@@ -972,7 +971,7 @@
         "splitLayout": "",
         "className": "",
         "x": 370,
-        "y": 660,
+        "y": 740,
         "wires": [
             [
                 "1d0f37c474eaff61"
@@ -1000,7 +999,7 @@
         "to": "",
         "reg": false,
         "x": 840,
-        "y": 600,
+        "y": 680,
         "wires": [
             [
                 "3dd0d9540cd1fe43"
@@ -1029,7 +1028,7 @@
         "topic": "topic",
         "topicType": "msg",
         "x": 380,
-        "y": 720,
+        "y": 800,
         "wires": [
             [
                 "af995ab803f71782"
@@ -1049,7 +1048,7 @@
         "finalize": "",
         "libs": [],
         "x": 880,
-        "y": 720,
+        "y": 800,
         "wires": [
             [
                 "3e967dcc8302ee1f"
@@ -1069,7 +1068,7 @@
         "finalize": "",
         "libs": [],
         "x": 360,
-        "y": 600,
+        "y": 680,
         "wires": [
             [
                 "26ce9e7545103a93"
@@ -1091,7 +1090,7 @@
         "seqKey": "payload",
         "seqKeyType": "msg",
         "x": 510,
-        "y": 600,
+        "y": 680,
         "wires": [
             [
                 "1a3747ffc8d762e5"
@@ -1111,7 +1110,7 @@
         "finalize": "",
         "libs": [],
         "x": 600,
-        "y": 660,
+        "y": 740,
         "wires": [
             [
                 "ab83b699807e02af"
@@ -1131,7 +1130,7 @@
         "overwriteFile": "true",
         "encoding": "utf8",
         "x": 870,
-        "y": 660,
+        "y": 740,
         "wires": [
             [
                 "3e967dcc8302ee1f"
@@ -1160,7 +1159,7 @@
         "payload": "",
         "payloadType": "date",
         "x": 150,
-        "y": 260,
+        "y": 340,
         "wires": [
             [
                 "7683426ffcbecfa9"
@@ -1168,13 +1167,67 @@
         ]
     },
     {
-        "id": "101e710b8defc4fe",
-        "type": "comment",
+        "id": "a9aca461a95cb9e1",
+        "type": "inject",
         "z": "e47edbe0ed437c73",
-        "name": "Set the MQTT password if not connected",
-        "info": "",
-        "x": 440,
-        "y": 40,
+        "name": "Create Database",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": true,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "x": 150,
+        "y": 180,
+        "wires": [
+            [
+                "7545c346aa2a92c9"
+            ]
+        ]
+    },
+    {
+        "id": "7545c346aa2a92c9",
+        "type": "influxdb in",
+        "z": "e47edbe0ed437c73",
+        "influxdb": "ca2547b7188cdec3",
+        "name": "log",
+        "query": "CREATE DATABASE log",
+        "rawOutput": false,
+        "precision": "",
+        "retentionPolicy": "",
+        "org": "",
+        "x": 340,
+        "y": 180,
+        "wires": [
+            [
+                "1a60a8aa8bb1da51"
+            ]
+        ]
+    },
+    {
+        "id": "1a60a8aa8bb1da51",
+        "type": "debug",
+        "z": "e47edbe0ed437c73",
+        "name": "debug 235",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 520,
+        "y": 180,
         "wires": []
     },
     {
