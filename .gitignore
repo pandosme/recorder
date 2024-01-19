@@ -2,4 +2,6 @@ docker-compose.yaml
 influxdb
 settings.js
 flows-cred.json
-
+*.backup
+package-lock.json
+.config.*
