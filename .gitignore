@@ -3,3 +3,8 @@ flows-cred.json
 *.backup
 package-lock.json
 .config.*
+.npm/
+cameras.json
+devices.json
+node_modules/
+
