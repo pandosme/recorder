@@ -21,8 +21,8 @@ services:
           - AXIS_ROOT_PASSWORD=Devidce root account password
           - MINIO_ADDRESS=a.b.c.d
           - MINIO_PORT=9000
-          - MINIO_KEY=
-          - MINIO_SECRET=
+          - MINIO_KEY=Key from generated credentials in minio server
+          - MINIO_SECRET=Secret from generated credentials in minio server
           - ACS_ADDRESS=ACS address if available
           - ACS_USER=ACS use if available
           - ACS_PASSWORD=ACS user if available
