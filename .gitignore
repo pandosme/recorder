@@ -1,5 +1,5 @@
+docker-compose.yaml
 influxdb
-flows-cred.json
 *.backup
 package-lock.json
 .config.*
