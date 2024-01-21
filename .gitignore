@@ -7,4 +7,5 @@ package-lock.json
 cameras.json
 devices.json
 node_modules/
+fmr/
 
