@@ -16,6 +16,7 @@ services:
           - TZ=Europe/Stockholm
           - SERVER_ADDRESS=a.b.c.d:18100
           - MQTT_ADDRESS=a.b.c.d
+          - MQTT_PORT=1883
           - MQTT_USER=MQTT user if needed.  Leave blank if not.
           - MQTT_PASSWORD=MQTT password if needed.  Leave blank if not.
           - AXIS_ROOT_PASSWORD=Devidce root account password
