@@ -66,7 +66,9 @@
             "20be60eebaf821f2"
         ],
         "x": 254,
-        "y": 899
+        "y": 899,
+        "w": 892,
+        "h": 502
     },
     {
         "id": "f016075ba057df3b",
@@ -94,7 +96,9 @@
             "30fefe770d302b6d"
         ],
         "x": 254,
-        "y": 539
+        "y": 539,
+        "w": 852,
+        "h": 302
     },
     {
         "id": "4024b3d5b06eaa70",
@@ -111,7 +115,9 @@
             "b7afe69b4331fda0"
         ],
         "x": 254,
-        "y": 79
+        "y": 79,
+        "w": 812,
+        "h": 142
     },
     {
         "id": "54ca9f41add64fe2",
@@ -128,7 +134,9 @@
             "bd39b74ddced4dad"
         ],
         "x": 254,
-        "y": 259
+        "y": 259,
+        "w": 282,
+        "h": 222
     },
     {
         "id": "2950bfd809e8f76c",
@@ -170,7 +178,9 @@
             "4166df8c0fb59d4e"
         ],
         "x": 254,
-        "y": 1459
+        "y": 1459,
+        "w": 1172,
+        "h": 542
     },
     {
         "id": "960cb6dc51e99160",
@@ -194,7 +204,9 @@
             "a832b605b858e3f4"
         ],
         "x": 254,
-        "y": 2059
+        "y": 2059,
+        "w": 932,
+        "h": 382
     },
     {
         "id": "8da94ea605c8d5d2",
@@ -1179,7 +1191,7 @@
         "type": "function",
         "z": "46f45eec56bea94f",
         "name": "Insert",
-        "func": "var camera = msg.payload;\n\nvar start = new Date(msg.chunk.start_time).getTime();\nvar end = new Date(msg.chunk.end_time).getTime();\nvar duration = (end - start) / 1000;\n\nmsg.payload = [\n    {\n        start: start,\n        end: end,\n        duration: duration,\n        url: 'http://rec.juhlin.me/mp4?file=' + msg.chunk.media_filename + '&bucket=' + camera.fmr,\n    } , {\n        name: camera.name,\n        serial: camera.serial,\n        tag: msg.chunk.recording_token || \"Recording\",\n        source: \"FMR\",\n        resolution: msg.payload.resolution\n    }\n]\nreturn msg;",
+        "func": "var camera = msg.payload;\n\nvar start = new Date(msg.chunk.start_time).getTime();\nvar end = new Date(msg.chunk.end_time).getTime();\nvar duration = (end - start) / 1000;\n\nmsg.payload = [\n    {\n        start: start,\n        end: end,\n        duration: duration,\n        url: 'http://' + msg.serverAddress + '/mp4?file=' + msg.chunk.media_filename + '&bucket=' + camera.fmr,\n    } , {\n        name: camera.name,\n        serial: camera.serial,\n        tag: msg.chunk.recording_token || \"Recording\",\n        recorder: \"FMR\",\n        resolution: msg.payload.resolution\n    }\n]\nreturn msg;",
         "outputs": 1,
         "noerr": 0,
         "initialize": "",
@@ -1256,6 +1268,13 @@
                 "pt": "msg",
                 "to": "payload",
                 "tot": "msg"
+            },
+            {
+                "t": "set",
+                "p": "serverAddress",
+                "pt": "msg",
+                "to": "SERVER_ADDRESS",
+                "tot": "env"
             }
         ],
         "action": "",
@@ -1689,14 +1708,14 @@
         "id": "c784a582dab9eb6d",
         "type": "function",
         "z": "46f45eec56bea94f",
-        "name": "Insert",
-        "func": "var camera = msg.payload;\n\nvar start = new Date(msg.chunk.start_time).getTime();\nvar end = new Date(msg.chunk.end_time).getTime();\nvar duration = (end - start) / 1000;\n\nmsg.payload = {\n    name: camera.name,\n    serial: camera.serial,\n    tag: msg.chunk.recording_token,\n    start: start,\n    end: end,\n    duration: duration,\n    bucket: msg.topic.split('/')[1],\n    file: msg.chunk.media_filename\n}\n\nreturn msg;",
+        "name": "Payload",
+        "func": "var camera = msg.payload;\nmsg.topic = \"recording/\" + camera.serial;\n\nvar start = new Date(msg.chunk.start_time).getTime();\nvar end = new Date(msg.chunk.end_time).getTime();\nvar duration = (end - start) / 1000;\n\nmsg.payload = {\n    name: camera.name,\n    serial: camera.serial,\n    tag: msg.chunk.recording_token || \"Recording\",\n    start: start,\n    end: end,\n    duration: duration,\n    resolution: msg.payload.resolution,\n    url: 'http://' + msg.serverAddress + '/mp4?file=' + msg.chunk.media_filename + '&bucket=' + camera.fmr,\n    recorder: \"FMR\"\n}\n\nreturn msg;\n\n",
         "outputs": 1,
         "noerr": 0,
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 750,
+        "x": 760,
         "y": 340,
         "wires": [
             [
@@ -1708,8 +1727,8 @@
         "id": "0a3a179605021c3d",
         "type": "mqtt out",
         "z": "46f45eec56bea94f",
-        "name": "",
-        "topic": "record/complete",
+        "name": "recording/SERIAL",
+        "topic": "",
         "qos": "",
         "retain": "",
         "respTopic": "",
@@ -1718,7 +1737,7 @@
         "correl": "",
         "expiry": "",
         "broker": "97fd97198befb71e",
-        "x": 980,
+        "x": 990,
         "y": 340,
         "wires": []
     },
@@ -1787,7 +1806,7 @@
         "type": "function",
         "z": "46f45eec56bea94f",
         "name": "Insert",
-        "func": "var camera = msg.payload;\n\nmsg.payload = [\n    {\n        start: msg.payload.start,\n        end: msg.payload.end,\n        duration: msg.payload.duration,\n        url: msg.payload.url\n    } , {\n        name: msg.payload.name || camera.serial,\n        serial: msg.payload.serial,\n        tag: msg.payload.tag || \"Recording\",\n        source: \"SD\",\n        resolution: msg.payload.resolution,\n        fps: msg.payload.fps\n    }\n]\nreturn msg;\n\n",
+        "func": "var camera = msg.payload;\n\nmsg.payload = [\n    {\n        start: msg.payload.start,\n        end: msg.payload.end,\n        duration: msg.payload.duration,\n        url: msg.payload.url\n    } , {\n        name: msg.payload.name || camera.serial,\n        serial: msg.payload.serial,\n        tag: msg.payload.tag || \"Recording\",\n        recorder: \"SD\",\n        resolution: msg.payload.resolution,\n        fps: msg.payload.fps\n    }\n]\nreturn msg;\n\n",
         "outputs": 1,
         "noerr": 0,
         "initialize": "",
@@ -1841,7 +1860,7 @@
         "type": "function",
         "z": "46f45eec56bea94f",
         "name": "global.cameras",
-        "func": "var cameras = global.get(\"cameras\") || {};\nif( !msg.payload.hasOwnProperty(\"serial\") ) \n    return;\nif (cameras.hasOwnProperty(\"serial\") )\n    return;\n\ncameras[msg.payload.serial] = {\n    \"name\": msg.payload.name,\n    \"serial\": msg.payload.serial,\n    \"address\": msg.payload.address,\n    \"model\": msg.payload.model,\n    \"SD\": true,\n    \"resolution\": msg.payload.resolution,\n}\n\nglobal.set(\"cameras\",cameras);\n\nmsg.payload = cameras[msg.payload.serial];\n\nreturn msg;\n",
+        "func": "var cameras = global.get(\"cameras\") || {};\nif( !msg.payload.hasOwnProperty(\"serial\") ) \n    return;\nif (cameras.hasOwnProperty(\"serial\") )\n    return;\n\ncameras[msg.payload.serial] = {\n    \"name\": msg.payload.name,\n    \"serial\": msg.payload.serial,\n    \"address\": msg.payload.address,\n    \"model\": msg.payload.model,\n    \"SD\": true,\n    \"recorder\": \"SD\",\n    \"resolution\": msg.payload.resolution,\n}\n\nglobal.set(\"cameras\",cameras);\n\nmsg.payload = cameras[msg.payload.serial];\n\nreturn msg;\n",
         "outputs": 1,
         "noerr": 0,
         "initialize": "",
