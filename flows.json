@@ -1359,7 +1359,7 @@
         "type": "debug",
         "z": "46f45eec56bea94f",
         "name": "debug 212",
-        "active": true,
+        "active": false,
         "tosidebar": true,
         "console": false,
         "tostatus": false,
@@ -1471,7 +1471,7 @@
         "type": "debug",
         "z": "46f45eec56bea94f",
         "name": "debug 248",
-        "active": true,
+        "active": false,
         "tosidebar": true,
         "console": false,
         "tostatus": false,
@@ -1487,7 +1487,7 @@
         "type": "debug",
         "z": "46f45eec56bea94f",
         "name": "debug 257",
-        "active": true,
+        "active": false,
         "tosidebar": true,
         "console": false,
         "tostatus": false,
@@ -1766,7 +1766,8 @@
             [
                 "ffb0f9b85b0ba3a0",
                 "9c5b6d3362f26362",
-                "dc660b7f693f7901"
+                "dc660b7f693f7901",
+                "1ce727f95c5605f3"
             ]
         ]
     },
@@ -1814,6 +1815,7 @@
         "name": "Insert",
         "func": "var camera = msg.payload;\n\nmsg.payload = [\n    {\n        start: msg.payload.start,\n        end: msg.payload.end,\n        duration: msg.payload.duration,\n        url: msg.payload.url\n    } , {\n        name: msg.payload.name || camera.serial,\n        serial: msg.payload.serial,\n        tag: msg.payload.tag || \"Recording\",\n        recorder: \"SD\",\n        resolution: msg.payload.resolution,\n        fps: msg.payload.fps\n    }\n]\nreturn msg;\n\n",
         "outputs": 1,
+        "timeout": "",
         "noerr": 0,
         "initialize": "",
         "finalize": "",
@@ -1840,7 +1842,7 @@
         "statusVal": "",
         "statusType": "auto",
         "x": 510,
-        "y": 500,
+        "y": 540,
         "wires": []
     },
     {
@@ -1874,7 +1876,7 @@
         "finalize": "",
         "libs": [],
         "x": 520,
-        "y": 460,
+        "y": 500,
         "wires": [
             [
                 "26a056ec3a0dfb04",
@@ -1894,7 +1896,7 @@
         "finalize": "",
         "libs": [],
         "x": 910,
-        "y": 460,
+        "y": 500,
         "wires": [
             [
                 "9c23a143550531f7"
@@ -1913,7 +1915,7 @@
         "overwriteFile": "true",
         "encoding": "utf8",
         "x": 1110,
-        "y": 460,
+        "y": 500,
         "wires": [
             []
         ]
@@ -1938,7 +1940,7 @@
         "to": "",
         "reg": false,
         "x": 740,
-        "y": 460,
+        "y": 500,
         "wires": [
             [
                 "1421b98b44c33385"
@@ -1958,7 +1960,7 @@
         "statusVal": "",
         "statusType": "auto",
         "x": 740,
-        "y": 500,
+        "y": 540,
         "wires": []
     },
     {
@@ -2041,11 +2043,49 @@
         "wires": []
     },
     {
+        "id": "1ce727f95c5605f3",
+        "type": "function",
+        "z": "46f45eec56bea94f",
+        "name": "Payload",
+        "func": "msg.topic = \"recording/\" + msg.payload.serial;\n\nmsg.payload = {\n    name: msg.payload.name || msg.payload.serial,\n    serial: msg.payload.serial,\n    tag: msg.payload.tag || \"Recording\",\n    start: msg.payload.start,\n    end: msg.payload.en,\n    duration: msg.payload.duration,\n    resolution: msg.payload.resolution || \"Undefined\",\n    url: msg.payload.url,\n    recorder: \"SD\"\n}\n\nreturn msg;\n",
+        "outputs": 1,
+        "timeout": "",
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 500,
+        "y": 460,
+        "wires": [
+            [
+                "4e559e9c858fa208"
+            ]
+        ]
+    },
+    {
+        "id": "4e559e9c858fa208",
+        "type": "mqtt out",
+        "z": "46f45eec56bea94f",
+        "name": "recording/SERIAL",
+        "topic": "",
+        "qos": "",
+        "retain": "",
+        "respTopic": "",
+        "contentType": "",
+        "userProps": "",
+        "correl": "",
+        "expiry": "",
+        "broker": "97fd97198befb71e",
+        "x": 730,
+        "y": 460,
+        "wires": []
+    },
+    {
         "id": "e63ebce023a2f994",
         "type": "debug",
         "z": "d5ec438b7021569d",
         "name": "debug 195",
-        "active": true,
+        "active": false,
         "tosidebar": true,
         "console": false,
         "tostatus": false,
@@ -2210,7 +2250,7 @@
         "type": "debug",
         "z": "d5ec438b7021569d",
         "name": "debug 234",
-        "active": true,
+        "active": false,
         "tosidebar": true,
         "console": false,
         "tostatus": false,
@@ -2226,7 +2266,7 @@
         "type": "debug",
         "z": "d5ec438b7021569d",
         "name": "debug 228",
-        "active": true,
+        "active": false,
         "tosidebar": true,
         "console": false,
         "tostatus": false,
@@ -2292,7 +2332,7 @@
         "type": "debug",
         "z": "d5ec438b7021569d",
         "name": "debug 237",
-        "active": true,
+        "active": false,
         "tosidebar": true,
         "console": false,
         "tostatus": false,
@@ -3189,7 +3229,7 @@
         "type": "debug",
         "z": "d5ec438b7021569d",
         "name": "debug 275",
-        "active": true,
+        "active": false,
         "tosidebar": true,
         "console": false,
         "tostatus": false,
@@ -3205,7 +3245,7 @@
         "type": "debug",
         "z": "d5ec438b7021569d",
         "name": "debug 276",
-        "active": true,
+        "active": false,
         "tosidebar": true,
         "console": false,
         "tostatus": false,
@@ -3221,7 +3261,7 @@
         "type": "debug",
         "z": "d5ec438b7021569d",
         "name": "debug 278",
-        "active": true,
+        "active": false,
         "tosidebar": true,
         "console": false,
         "tostatus": false,
@@ -3237,7 +3277,7 @@
         "type": "debug",
         "z": "d5ec438b7021569d",
         "name": "debug 279",
-        "active": true,
+        "active": false,
         "tosidebar": true,
         "console": false,
         "tostatus": false,
@@ -3253,7 +3293,7 @@
         "type": "debug",
         "z": "d5ec438b7021569d",
         "name": "debug 280",
-        "active": true,
+        "active": false,
         "tosidebar": true,
         "console": false,
         "tostatus": false,
@@ -3317,7 +3357,7 @@
         "type": "debug",
         "z": "d5ec438b7021569d",
         "name": "debug 284",
-        "active": true,
+        "active": false,
         "tosidebar": true,
         "console": false,
         "tostatus": false,
@@ -3418,7 +3458,7 @@
         "type": "debug",
         "z": "d5ec438b7021569d",
         "name": "debug 294",
-        "active": true,
+        "active": false,
         "tosidebar": true,
         "console": false,
         "tostatus": false,
