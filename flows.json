@@ -63,11 +63,12 @@
             "ab3991961bd3c689",
             "f7f6f2b595a4941d",
             "ff9a15e6fd836f78",
-            "20be60eebaf821f2"
+            "20be60eebaf821f2",
+            "d8c93f8720f169d2"
         ],
         "x": 254,
         "y": 899,
-        "w": 892,
+        "w": 912,
         "h": 502
     },
     {
@@ -135,7 +136,7 @@
         ],
         "x": 254,
         "y": 259,
-        "w": 282,
+        "w": 272,
         "h": 222
     },
     {
@@ -175,7 +176,8 @@
             "9c3cbb19dc54433a",
             "b12132b9eec68a83",
             "7c4c3ee7b47ce30e",
-            "4166df8c0fb59d4e"
+            "4166df8c0fb59d4e",
+            "e38971d140b97b87"
         ],
         "x": 254,
         "y": 1459,
@@ -302,11 +304,12 @@
         "type": "junction",
         "z": "26ed8a12ce112e81",
         "g": "3f1fe65c928d1b37",
-        "x": 1060,
+        "x": 1140,
         "y": 1300,
         "wires": [
             [
-                "4034a60f2622a799"
+                "4034a60f2622a799",
+                "c18d4120205bc8b7"
             ]
         ]
     },
@@ -395,6 +398,7 @@
         "protocolVersion": "5",
         "keepalive": "60",
         "cleansession": true,
+        "autoUnsubscribe": true,
         "birthTopic": "",
         "birthQos": "0",
         "birthRetain": "false",
@@ -874,8 +878,9 @@
         "type": "function",
         "z": "5d60c43b4b924270",
         "name": "Cameras",
-        "func": "var cameras = global.get(\"cameras\") || {};\nmsg.options = [{\"All\":\"All\"}];\n\nfor( var serial in cameras ) {\n    var option = {};\n    option[cameras[serial].name] = serial;\n    msg.options.push(option);\n}\n\nvar selected = global.get(\"selectedCamera\");\nif(selected) {\n    msg.payload = selected.serial;\n    return msg;\n}\n\nmsg.payload = \"All\";\nreturn msg;",
+        "func": "var cameras = global.get(\"cameras\") || {};\nmsg.options = [{\"All\":\"All\"}];\n\nfor( var serial in cameras ) {\nnode.warn(cameras[serial]);\n    var option = {};\n    option[cameras[serial].name] = serial;\n    msg.options.push(option);\n}\n\nvar selected = global.get(\"selectedCamera\");\nif(selected) {\n    msg.payload = selected.serial;\n    return msg;\n}\n\nmsg.payload = \"All\";\nreturn msg;",
         "outputs": 1,
+        "timeout": "",
         "noerr": 0,
         "initialize": "",
         "finalize": "",
@@ -1193,6 +1198,7 @@
         "name": "Insert",
         "func": "var camera = msg.payload;\n\nvar start = new Date(msg.chunk.start_time).getTime();\nvar end = new Date(msg.chunk.end_time).getTime();\nvar duration = (end - start) / 1000;\n\nmsg.payload = [\n    {\n        start: start,\n        end: end,\n        duration: duration,\n        url: 'http://' + msg.serverAddress + '/mp4?file=' + msg.chunk.media_filename + '&bucket=' + camera.fmr,\n    } , {\n        name: camera.name,\n        serial: camera.serial,\n        tag: msg.chunk.recording_token || \"Recording\",\n        recorder: \"FMR\",\n        resolution: msg.payload.resolution\n    }\n]\nreturn msg;",
         "outputs": 1,
+        "timeout": "",
         "noerr": 0,
         "initialize": "",
         "finalize": "",
@@ -1465,7 +1471,7 @@
         "type": "debug",
         "z": "46f45eec56bea94f",
         "name": "debug 248",
-        "active": false,
+        "active": true,
         "tosidebar": true,
         "console": false,
         "tostatus": false,
@@ -1862,6 +1868,7 @@
         "name": "global.cameras",
         "func": "var cameras = global.get(\"cameras\") || {};\nif( !msg.payload.hasOwnProperty(\"serial\") ) \n    return;\nif (cameras.hasOwnProperty(\"serial\") )\n    return;\n\ncameras[msg.payload.serial] = {\n    \"name\": msg.payload.name,\n    \"serial\": msg.payload.serial,\n    \"address\": msg.payload.address,\n    \"model\": msg.payload.model,\n    \"SD\": true,\n    \"recorder\": \"SD\",\n    \"resolution\": msg.payload.resolution,\n}\n\nglobal.set(\"cameras\",cameras);\n\nmsg.payload = cameras[msg.payload.serial];\n\nreturn msg;\n",
         "outputs": 1,
+        "timeout": "",
         "noerr": 0,
         "initialize": "",
         "finalize": "",
@@ -2038,7 +2045,7 @@
         "type": "debug",
         "z": "d5ec438b7021569d",
         "name": "debug 195",
-        "active": false,
+        "active": true,
         "tosidebar": true,
         "console": false,
         "tostatus": false,
@@ -2128,8 +2135,9 @@
         "z": "d5ec438b7021569d",
         "g": "8ead32b02e2d7c73",
         "name": "response",
-        "func": "if(msg.payload.getObject === false ) {\n    msg.statusCode = 500,\n    msg.payload = \"No recording\"\n    return msg;\n}\n\nmsg.payload = msg.payload.objectData;\nmsg.headers = {};\nmsg.headers[\"Content-Type\"] = \"video/mp4\",\n//msg.headers['Content-Disposition'] = 'attachment; filename=recording.mp4';\nmsg.headers[\"Content-Length\"] = msg.payload.length;\nreturn msg;\n",
+        "func": "if(msg.payload.getObject === false )\n    return;\n\nmsg.payload = msg.payload.objectData;\nmsg.headers = {};\nmsg.headers[\"Content-Type\"] = \"video/mp4\",\n//msg.headers['Content-Disposition'] = 'attachment; filename=recording.mp4';\nmsg.headers[\"Content-Length\"] = msg.payload.length;\nreturn msg;\n",
         "outputs": 1,
+        "timeout": "",
         "noerr": 0,
         "initialize": "",
         "finalize": "",
@@ -2183,6 +2191,7 @@
         "name": "Error",
         "func": "if(msg.payload === null)\n    return;\nmsg.statusCode = 500;\nreturn msg;",
         "outputs": 1,
+        "timeout": "",
         "noerr": 0,
         "initialize": "",
         "finalize": "",
@@ -2201,7 +2210,7 @@
         "type": "debug",
         "z": "d5ec438b7021569d",
         "name": "debug 234",
-        "active": false,
+        "active": true,
         "tosidebar": true,
         "console": false,
         "tostatus": false,
@@ -2217,7 +2226,7 @@
         "type": "debug",
         "z": "d5ec438b7021569d",
         "name": "debug 228",
-        "active": false,
+        "active": true,
         "tosidebar": true,
         "console": false,
         "tostatus": false,
@@ -2283,7 +2292,7 @@
         "type": "debug",
         "z": "d5ec438b7021569d",
         "name": "debug 237",
-        "active": false,
+        "active": true,
         "tosidebar": true,
         "console": false,
         "tostatus": false,
@@ -2367,6 +2376,7 @@
         "name": "Validate",
         "func": "if( !msg.payload.hasOwnProperty(\"serial\") ) {\n    msg.payload = \"Start recording failed.  Missing serial\",\n    msg.statusCode = 400;\n    node.send([msg, null]);\n    return;\n}\n\nnode.send([null,msg]);\n",
         "outputs": 2,
+        "timeout": "",
         "noerr": 0,
         "initialize": "",
         "finalize": "",
@@ -2518,8 +2528,9 @@
         "z": "d5ec438b7021569d",
         "g": "8da94ea605c8d5d2",
         "name": "Get Camera By Serial",
-        "func": "var cameras = global.get(\"cameras\");\nif(!cameras) {\n    node.warn(\"No cameras\");\n    msg.payload = null;\n    return msg;\n}\n\nif( !cameras.hasOwnProperty(msg.payload.serial) ) {\n    node.warn(\"Camera \" + msg.payload.serial + \" not found\");\n    msg.payload = null;\n    return msg;\n    return;\n}\n\nmsg.payload = cameras[msg.payload.serial];\n\nif( msg.payload.active === false ) {\n    node.warn(\"Camera \" + msg.payload.name + \" is not active\")\n    msg.payload = null;\n    return msg;\n}\n\nif (msg.payload.status !== \"ready\") {\n    node.warn(\"Camera \" + msg.payload.name + \" is not available\")\n    msg.payload = null;\n    return msg;\n}\n\n\nreturn msg;",
+        "func": "var cameras = global.get(\"cameras\");\nif(!cameras) {\n    node.warn(\"No cameras\");\n    msg.payload = null;\n    return msg;\n}\n\nif( !cameras.hasOwnProperty(msg.payload.serial) ) {\n    node.warn(\"Camera \" + msg.payload.serial + \" not found\");\n    msg.payload = null;\n    return msg;\n    return;\n}\n\nmsg.payload = cameras[msg.payload.serial];\n\nif( msg.payload.active === false ) {\n    node.warn(\"Camera \" + msg.payload.name + \" is not active\")\n    msg.payload = null;\n    return msg;\n}\n\nreturn msg;",
         "outputs": 1,
+        "timeout": "",
         "noerr": 0,
         "initialize": "",
         "finalize": "",
@@ -2542,6 +2553,7 @@
         "name": "FMR request",
         "func": "var camera = msg.payload;\n\nvar recordings = flow.get(\"recordings\") || {};\n\nvar recording = {\n    counter: 0\n}\nif( recordings.hasOwnProperty(msg.payload.serial ) )\n    recording = recordings[msg.payload.serial];\nrecording.counter++;\nflow.set(\"recordings\",recordings);\n\nmsg.topic = \"recorder/\" + camera.fmr + \"/command/recorder/activate_rec\"\n\nmsg.payload = {\n    active: true,\n    recording_token: msg.request.tag || \"Recording\",\n}\n\nif( msg.request.hasOwnProperty(\"timestamp\"))\n    msg.payload.trigger_time = new Date(msg.event.request).toISOString()\n\n\nif (msg.request.hasOwnProperty(\"buffer\") )\n    msg.payload.prebuffer = msg.payload.buffer || camera.buffer;\n\nreturn msg;\n",
         "outputs": 1,
+        "timeout": "",
         "noerr": 0,
         "initialize": "",
         "finalize": "",
@@ -2672,8 +2684,9 @@
         "z": "d5ec438b7021569d",
         "g": "89a58f3caee2f48d",
         "name": "Get Camera By Serial",
-        "func": "var cameras = global.get(\"cameras\");\nif(!cameras) {\n    node.warn(\"No cameras\");\n    msg.payload = null;\n    return msg;\n}\n\nif( !cameras.hasOwnProperty(msg.payload.serial) ) {\n    node.warn(\"Camera \" + msg.payload.serial + \" not found\");\n    msg.payload = null;\n    return msg;\n    return;\n}\n\nmsg.payload = cameras[msg.payload.serial];\n\nif( msg.payload.active === false ) {\n    node.warn(\"Camera \" + msg.payload.name + \" is not active\")\n    msg.payload = null;\n    return msg;\n}\n\nif (msg.payload.status !== \"ready\") {\n    node.warn(\"Camera \" + msg.payload.name + \" is not available\")\n    msg.payload = null;\n    return msg;\n}\n\n\nreturn msg;",
+        "func": "var cameras = global.get(\"cameras\");\nif(!cameras) {\n    node.warn(\"No cameras\");\n    msg.payload = null;\n    return msg;\n}\n\nif( !cameras.hasOwnProperty(msg.payload.serial) ) {\n    node.warn(\"Camera \" + msg.payload.serial + \" not found\");\n    msg.payload = null;\n    return msg;\n    return;\n}\n\nmsg.payload = cameras[msg.payload.serial];\n\nif( msg.payload.active === false ) {\n    node.warn(\"Camera \" + msg.payload.name + \" is not active\")\n    msg.payload = null;\n    return msg;\n}\n\n\nreturn msg;",
         "outputs": 1,
+        "timeout": "",
         "noerr": 0,
         "initialize": "",
         "finalize": "",
@@ -2692,8 +2705,9 @@
         "z": "d5ec438b7021569d",
         "g": "89a58f3caee2f48d",
         "name": "FMR request",
-        "func": "var camera = msg.payload;\n\nmsg.topic = \"recorder/\" + camera.fmr + \"/command/recorder/activate_rec\"\n\nvar recordings = flow.get(\"recordings\");\n\nif( !recordings ) {\n    msg.payload = {\n        active: false,\n        recording_token: msg.request.tag || \"Recording\",\n    }\n    return msg;\n}\n\nif (!recordings.hasOwnProperty(msg.payload.serial)) {\n    msg.payload = {\n        active: false,\n        recording_token: msg.request.tag || \"Recording\",\n    }\n    return msg;\n}\n\nvar recording = recordings[msg.payload.serial];\nrecording.counter--;\nif (recording.counter < 0 )\n    recording.counter = 0;\nflow.set(\"recordings\",recordings);\n\nif( recording.counters === 0 ) {\n    msg.payload = {\n        active: false,\n        recording_token: msg.request.tag || \"Recording\",\n    }\n    if (msg.request.hasOwnProperty(\"buffer\") )\n        msg.payload.postbuffer = msg.request.buffer || camera.buffer;\n    return msg;\n}\n",
+        "func": "var camera = msg.payload;\n\nmsg.topic = \"recorder/\" + camera.fmr + \"/command/recorder/activate_rec\"\n\nvar recordings = flow.get(\"recordings\");\n\nif( !recordings ) {\n    msg.payload = {\n        active: false,\n        recording_token: msg.request.tag || \"Recording\",\n    }\n    if (msg.request.hasOwnProperty(\"buffer\") )\n        msg.payload.postbuffer = msg.payload.buffer || camera.buffer;\n\n    return msg;\n}\n\nif (!recordings.hasOwnProperty(msg.payload.serial)) {\n    msg.payload = {\n        active: false,\n        recording_token: msg.request.tag || \"Recording\",\n    }\n    if (msg.request.hasOwnProperty(\"buffer\") )\n        msg.payload.postbuffer = msg.payload.buffer || camera.buffer;\n    return msg;\n}\n\nvar recording = recordings[msg.payload.serial];\nrecording.counter--;\nif (recording.counter < 0 )\n    recording.counter = 0;\nflow.set(\"recordings\",recordings);\n\nif( recording.counters === 0 ) {\n    msg.payload = {\n        active: false,\n        recording_token: msg.request.tag || \"Recording\",\n    }\n    if (msg.request.hasOwnProperty(\"buffer\") )\n        msg.payload.postbuffer = msg.request.buffer || camera.buffer;\n    if (msg.request.hasOwnProperty(\"buffer\") )\n        msg.payload.postbuffer = msg.payload.buffer || camera.buffer;\n    return msg;\n}\n",
         "outputs": 1,
+        "timeout": "",
         "noerr": 0,
         "initialize": "",
         "finalize": "",
@@ -2721,8 +2735,8 @@
         "correl": "",
         "expiry": "",
         "broker": "97fd97198befb71e",
-        "x": 880,
-        "y": 560,
+        "x": 890,
+        "y": 540,
         "wires": []
     },
     {
@@ -2733,6 +2747,7 @@
         "name": "Message",
         "func": "msg.payload = \"Recording start failed.  Invalid device serial number \" + msg.request.serial;\nreturn msg;",
         "outputs": 1,
+        "timeout": "",
         "noerr": 0,
         "initialize": "",
         "finalize": "",
@@ -3094,8 +3109,9 @@
         "z": "d5ec438b7021569d",
         "g": "89a58f3caee2f48d",
         "name": "Get Camera By Serial",
-        "func": "var cameras = global.get(\"cameras\");\nif(!cameras) {\n    node.warn(\"No cameras\");\n    msg.payload = null;\n    return msg;\n}\n\nif( !cameras.hasOwnProperty(msg.payload.serial) ) {\n    node.warn(\"Camera \" + msg.payload.serial + \" not found\");\n    msg.payload = null;\n    return msg;\n    return;\n}\n\nmsg.payload = cameras[msg.payload.serial];\n\nif( msg.payload.active === false ) {\n    node.warn(\"Camera \" + msg.payload.name + \" is not active\")\n    msg.payload = null;\n    return msg;\n}\n\nif (msg.payload.status !== \"ready\") {\n    node.warn(\"Camera \" + msg.payload.name + \" is not available\")\n    msg.payload = null;\n    return msg;\n}\n\n\nreturn msg;",
+        "func": "var cameras = global.get(\"cameras\");\nif(!cameras) {\n    node.warn(\"No cameras\");\n    msg.payload = null;\n    return msg;\n}\n\nif( !cameras.hasOwnProperty(msg.payload.serial) ) {\n    node.warn(\"Camera \" + msg.payload.serial + \" not found\");\n    msg.payload = null;\n    return msg;\n    return;\n}\n\nmsg.payload = cameras[msg.payload.serial];\n\nif( msg.payload.active === false ) {\n    node.warn(\"Camera \" + msg.payload.name + \" is not active\")\n    msg.payload = null;\n    return msg;\n}\n\nreturn msg;",
         "outputs": 1,
+        "timeout": "",
         "noerr": 0,
         "initialize": "",
         "finalize": "",
@@ -3116,6 +3132,7 @@
         "name": "FMR request",
         "func": "var camera = msg.payload;\n\nmsg.topic = \"recorder/\" + camera.fmr + \"/command/recorder/activate_rec\"\n\nvar recordings = flow.get(\"recordings\");\n\nif( !recordings ) {\n    msg.payload = {\n        active: false,\n        recording_token: msg.request.tag || \"Recording\",\n    }\n    return msg;\n}\n\nif (!recordings.hasOwnProperty(msg.payload.serial)) {\n    msg.payload = {\n        active: false,\n        recording_token: msg.request.tag || \"Recording\",\n    }\n    return msg;\n}\n\nvar recording = recordings[msg.payload.serial];\nrecording.counter--;\nif (recording.counter < 0 )\n    recording.counter = 0;\nflow.set(\"recordings\",recordings);\n\nif( recording.counters === 0 ) {\n    msg.payload = {\n        active: false,\n        recording_token: msg.request.tag || \"Recording\",\n    }\n    if (msg.request.hasOwnProperty(\"buffer\") )\n        msg.payload.postbuffer = msg.request.buffer || camera.buffer;\n    return msg;\n}\n",
         "outputs": 1,
+        "timeout": "",
         "noerr": 0,
         "initialize": "",
         "finalize": "",
@@ -3172,7 +3189,7 @@
         "type": "debug",
         "z": "d5ec438b7021569d",
         "name": "debug 275",
-        "active": false,
+        "active": true,
         "tosidebar": true,
         "console": false,
         "tostatus": false,
@@ -3188,7 +3205,7 @@
         "type": "debug",
         "z": "d5ec438b7021569d",
         "name": "debug 276",
-        "active": false,
+        "active": true,
         "tosidebar": true,
         "console": false,
         "tostatus": false,
@@ -3204,7 +3221,7 @@
         "type": "debug",
         "z": "d5ec438b7021569d",
         "name": "debug 278",
-        "active": false,
+        "active": true,
         "tosidebar": true,
         "console": false,
         "tostatus": false,
@@ -3220,7 +3237,7 @@
         "type": "debug",
         "z": "d5ec438b7021569d",
         "name": "debug 279",
-        "active": false,
+        "active": true,
         "tosidebar": true,
         "console": false,
         "tostatus": false,
@@ -3236,7 +3253,7 @@
         "type": "debug",
         "z": "d5ec438b7021569d",
         "name": "debug 280",
-        "active": false,
+        "active": true,
         "tosidebar": true,
         "console": false,
         "tostatus": false,
@@ -3373,6 +3390,80 @@
         "statusType": "auto",
         "x": 1850,
         "y": 240,
+        "wires": []
+    },
+    {
+        "id": "c01f33ca9942d00a",
+        "type": "mqtt in",
+        "z": "d5ec438b7021569d",
+        "name": "",
+        "topic": "recorder/#",
+        "qos": "2",
+        "datatype": "auto-detect",
+        "broker": "97fd97198befb71e",
+        "nl": false,
+        "rap": true,
+        "rh": 0,
+        "inputs": 0,
+        "x": 1020,
+        "y": 340,
+        "wires": [
+            [
+                "08542d5c93dadf5f"
+            ]
+        ]
+    },
+    {
+        "id": "08542d5c93dadf5f",
+        "type": "debug",
+        "z": "d5ec438b7021569d",
+        "name": "debug 294",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 1270,
+        "y": 340,
+        "wires": []
+    },
+    {
+        "id": "74737e30e579ddbb",
+        "type": "mqtt in",
+        "z": "d5ec438b7021569d",
+        "name": "",
+        "topic": "exception/#",
+        "qos": "2",
+        "datatype": "auto-detect",
+        "broker": "97fd97198befb71e",
+        "nl": false,
+        "rap": true,
+        "rh": 0,
+        "inputs": 0,
+        "x": 1030,
+        "y": 380,
+        "wires": [
+            [
+                "cd2957c4997c40cc"
+            ]
+        ]
+    },
+    {
+        "id": "cd2957c4997c40cc",
+        "type": "debug",
+        "z": "d5ec438b7021569d",
+        "name": "debug 295",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 1260,
+        "y": 380,
         "wires": []
     },
     {
@@ -3572,11 +3663,12 @@
         "name": "Pretty",
         "func": "msg.payload = JSON.stringify(msg.payload,null,2);\nreturn msg;",
         "outputs": 1,
+        "timeout": "",
         "noerr": 0,
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 810,
+        "x": 710,
         "y": 800,
         "wires": [
             [
@@ -3779,7 +3871,8 @@
         "wires": [
             [
                 "d82c77bd7e6f636d",
-                "b7afe69b4331fda0"
+                "b7afe69b4331fda0",
+                "722a64131ff85381"
             ]
         ]
     },
@@ -4029,15 +4122,16 @@
         "name": "remove",
         "func": "var cameras = global.get(\"cameras\");\ndelete cameras[flow.get(\"selected\").serial];\nglobal.set(\"cameras\",cameras);\nmsg.payload = cameras;\nreturn msg;",
         "outputs": 1,
+        "timeout": "",
         "noerr": 0,
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 920,
+        "x": 500,
         "y": 1360,
         "wires": [
             [
-                "20dcfbcf1d59a890"
+                "c3a8eb0cdd03e8aa"
             ]
         ]
     },
@@ -4626,6 +4720,7 @@
         "name": "Add Camera",
         "func": "var cameras = global.get(\"cameras\") || {};\nvar camera = {\n    name: msg.name,\n    serial: msg.camera.serial,\n    address: msg.address,\n    model: msg.camera.model,\n    buffer: 5,\n    acs: null,\n    fmr: msg.name.toLowerCase().replace(/\\s/g, \"_\"),\n    password: msg.fmrPassword,\n    resolution: msg.medium,\n    active: true,\n    resolutions: msg.resolutions\n}\ncameras[camera.serial] = camera;\nflow.set(\"cameras\",cameras);\nmsg.payload = camera;\nreturn msg;\n",
         "outputs": 1,
+        "timeout": "",
         "noerr": 0,
         "initialize": "",
         "finalize": "",
@@ -4644,9 +4739,10 @@
         "type": "function",
         "z": "26ed8a12ce112e81",
         "g": "2950bfd809e8f76c",
-        "name": "global.cameras;",
-        "func": "var cameras = global.get(\"cameras\") || {};\ncameras[msg.payload.serial] = msg.payload;\nglobal.set(\"cameras\",cameras);\n\nreturn msg;",
+        "name": "global.cameras",
+        "func": "var cameras = global.get(\"cameras\") || {};\ncameras[msg.payload.serial] = msg.payload;\nglobal.set(\"cameras\",cameras);\nmsg.payload = cameras;\nreturn msg;",
         "outputs": 1,
+        "timeout": "",
         "noerr": 0,
         "initialize": "",
         "finalize": "",
@@ -4655,7 +4751,7 @@
         "y": 1860,
         "wires": [
             [
-                "f8352062c98ae40c"
+                "e38971d140b97b87"
             ]
         ]
     },
@@ -4671,7 +4767,7 @@
         "createDir": false,
         "overwriteFile": "true",
         "encoding": "utf8",
-        "x": 750,
+        "x": 870,
         "y": 1860,
         "wires": [
             [
@@ -4974,7 +5070,7 @@
         "from": "",
         "to": "",
         "reg": false,
-        "x": 1000,
+        "x": 1080,
         "y": 1900,
         "wires": [
             [
@@ -4998,7 +5094,7 @@
         "className": "",
         "topic": "",
         "name": "",
-        "x": 1200,
+        "x": 1280,
         "y": 1900,
         "wires": []
     },
@@ -5022,11 +5118,11 @@
         "from": "",
         "to": "",
         "reg": false,
-        "x": 720,
+        "x": 680,
         "y": 1300,
         "wires": [
             [
-                "2a5dbdc97a9681be"
+                "d8c93f8720f169d2"
             ]
         ]
     },
@@ -5038,11 +5134,12 @@
         "name": "Update",
         "func": "var cameras = global.get(\"cameras\") || {};\nvar camera = flow.get(\"selected\");\nif(!camera)\n    return;\n\ncameras[camera.serial] = camera;\nglobal.set(\"cameras\", cameras);\nreturn msg;\n",
         "outputs": 1,
+        "timeout": "",
         "noerr": 0,
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 520,
+        "x": 500,
         "y": 1300,
         "wires": [
             [
@@ -5062,7 +5159,7 @@
         "createDir": false,
         "overwriteFile": "true",
         "encoding": "utf8",
-        "x": 910,
+        "x": 1010,
         "y": 1300,
         "wires": [
             [
@@ -5863,5 +5960,79 @@
         "x": 1240,
         "y": 360,
         "wires": []
+    },
+    {
+        "id": "722a64131ff85381",
+        "type": "debug",
+        "z": "26ed8a12ce112e81",
+        "name": "debug 292",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 900,
+        "y": 60,
+        "wires": []
+    },
+    {
+        "id": "c18d4120205bc8b7",
+        "type": "debug",
+        "z": "26ed8a12ce112e81",
+        "name": "debug 293",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 1290,
+        "y": 1240,
+        "wires": []
+    },
+    {
+        "id": "d8c93f8720f169d2",
+        "type": "function",
+        "z": "26ed8a12ce112e81",
+        "g": "3f1fe65c928d1b37",
+        "name": "Pretty",
+        "func": "msg.payload = JSON.stringify(msg.payload,null,2);\nreturn msg;",
+        "outputs": 1,
+        "timeout": "",
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 850,
+        "y": 1300,
+        "wires": [
+            [
+                "2a5dbdc97a9681be"
+            ]
+        ]
+    },
+    {
+        "id": "e38971d140b97b87",
+        "type": "function",
+        "z": "26ed8a12ce112e81",
+        "g": "2950bfd809e8f76c",
+        "name": "Pretty",
+        "func": "msg.payload = JSON.stringify(msg.payload,null,2);\nreturn msg;",
+        "outputs": 1,
+        "timeout": "",
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 690,
+        "y": 1860,
+        "wires": [
+            [
+                "f8352062c98ae40c"
+            ]
+        ]
     }
 ]
