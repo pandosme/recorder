@@ -1,0 +1,38 @@
+version: "3.4"
+services:
+    nodered:
+        image: nodered/node-red
+        container_name: recorder-app
+        restart: always
+        user: '0'
+        ports:
+          - '18100:1880'
+        links:
+          - influxdb
+        volumes:
+          - ./:/data
+        environment:
+          - TZ=Europe/Stockholm
+          - SERVER_ADDRESS=Address to the host running the server. IP or FQDN.:Add port [:18100] if needed.
+          - MQTT_ADDRESS=IP or FQDN
+          - MQTT_PORT=1883
+          - MQTT_USER=Leave blank if not needed.
+          - MQTT_PASSWORD=Leave blank if not needed.
+          - AXIS_ROOT_PASSWORD=Axis Cameras root account password
+          - MINIO_ADDRESS=IP or FQDN
+          - MINIO_PORT=9000
+          - MINIO_KEY=Key from generated credentials in minio server
+          - MINIO_SECRET=Secret from generated credentials in minio server
+          - ACS_ADDRESS=IP or FQDN (If available and used).  Leave blank if not used.
+          - ACS_USER=
+          - ACS_PASSWORD=
+    influxdb:
+        container_name: recorder-influx
+        restart: always
+        image: influxdb:1.8.10
+        user: '0'
+        volumes:
+          - ./influxdb:/var/lib/influxdb
+# Uncomment below if you want to expose the Influx DB
+#        ports:
+#          - '8086:8086' 
